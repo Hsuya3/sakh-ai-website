@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teach SAKH</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --error: #dc2626;
+            --warning: #f59e0b;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #3b82f6;
+                --primary-hover: #60a5fa;
+                --bg: #0f172a;
+                --card-bg: #1e293b;
+                --text: #f1f5f9;
+                --muted: #94a3b8;
+                --border: #334155;
+                --success: #22c55e;
+                --error: #ef4444;
+                --warning: #fbbf24;
+            }
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .container { width: 100%; max-width: 480px; }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+        }
+        h1 { font-size: 1.75rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: var(--muted); margin-bottom: 2rem; font-size: 0.95rem; }
+        .form-group { margin-bottom: 1.25rem; }
+        label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+        input[type="url"] {
+            width: 100%; padding: 0.875rem 1rem;
+            border: 1px solid var(--border); border-radius: 10px;
+            background: var(--bg); color: var(--text);
+            font-size: 1rem; transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        input[type="url"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+        input[type="url"]::placeholder { color: var(--muted); }
+        .btn {
+            width: 100%; padding: 1rem; border-radius: 10px; border: none;
+            background: var(--primary); color: white; font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: background 0.2s, opacity 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn:hover:not(:disabled) { background: var(--primary-hover); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn svg { width: 20px; height: 20px; }
+        .status { margin-top: 1.5rem; padding: 1rem; border-radius: 8px; font-size: 0.9rem; display: none; }
+        .status.visible { display: block; }
+        .status.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+        .status.error { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+        .status.loading { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+        @media (prefers-color-scheme: dark) {
+            .status.success { background: #052e16; border-color: #14532d; color: #86efac; }
+            .status.error { background: #450a0a; border-color: #7f1d1d; color: #fca5a5; }
+            .status.loading { background: #422006; border-color: #854d0e; color: #fde047; }
+        }
+        .spinner {
+            width: 18px; height: 18px; border: 2px solid transparent;
+            border-top-color: currentColor; border-radius: 50%; animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .footer { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top: 1.5rem; }
+        .tip { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Teach SAKH</h1>
+            <p class="subtitle">Drop a link. SAKH will read it, understand it, and remember it forever.</p>
+
+            <form id="teachForm">
+                <div class="form-group">
+                    <label for="urlInput">URL to teach</label>
+                    <input type="url" id="urlInput" name="url" placeholder="https://example.com/article..." required autocomplete="url">
+                    <p class="tip">Articles, docs, GitHub repos, Wikipedia, blogs, PDFs (direct links)</p>
+                </div>
+                <button type="submit" class="btn" id="submitBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="btnIcon">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    <span id="btnText">Teach SAKH</span>
+                </button>
+            </form>
+
+            <div class="status" id="status"></div>
+
+            <div class="footer">
+                Your link is processed locally on the developer's machine. No cloud storage.<br>
+                Built for <strong>SAKH AI</strong> — Local-first, Private, Yours.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('teachForm');
+        const statusEl = document.getElementById('status');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
+        const urlInput = document.getElementById('urlInput');
+
+        // Auto-detect backend URL (same origin)
+        const API_BASE = window.location.origin;
+
+        function showStatus(message, type) {
+            statusEl.textContent = message;
+            statusEl.className = 'status visible ' + type;
+        }
+        function hideStatus() { statusEl.className = 'status'; }
+        function setLoading(loading) {
+            submitBtn.disabled = loading;
+            if (loading) {
+                btnText.textContent = 'Reading...';
+                btnIcon.innerHTML = '<div class="spinner"></div>';
+            } else {
+                btnText.textContent = 'Teach SAKH';
+                btnIcon.innerHTML = `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>`;
+            }
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const url = urlInput.value.trim();
+            if (!url) return;
+
+            hideStatus();
+            setLoading(true);
+
+            try {
+                const res = await fetch(`${API_BASE}/teach`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    showStatus(`✅ ${data.message}`, 'success');
+                    urlInput.value = '';
+                } else {
+                    showStatus(`❌ ${data.detail || 'Failed to teach'}`, 'error');
+                }
+            } catch (err) {
+                showStatus(`❌ Network error. Is the developer running the server?`, 'error');
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        });
+    </script>
+</body>
+</html>
